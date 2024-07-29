@@ -7,7 +7,7 @@ import (
 )
 
 type Config struct {
-	ConfPath   string `env:"CONF_PATH" env-default:"config/config.yaml"`
+	ConfPath   string `env:"CONF_PATH" env-default:"/home/gorik/go/src/ozon-like/config/config.yaml"`
 	HTTPServer `yaml:"http_server"`
 	Database
 	AuthJWT `yaml:"auth_jwt"`
@@ -40,13 +40,14 @@ func MustLoad() *Config {
 
 	pathToCfg := cfg.ConfPath
 	if _, err = os.Stat(pathToCfg); os.IsNotExist(err) {
+		println("err")
 		log.Printf("Config file .env %s does not exist", pathToCfg)
-		os.Exit(1)
+		os.Exit(2)
 	}
 	err = cleanenv.ReadConfig(pathToCfg, &cfg)
 	if err != nil {
 		log.Printf("Coudln't read config file .env %s, %s", pathToCfg, err)
-		os.Exit(1)
+		os.Exit(3)
 	}
 	return &cfg
 }

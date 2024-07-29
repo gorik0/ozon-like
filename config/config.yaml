@@ -1,0 +1,7 @@
+database:
+  http_server: "http_server"
+  auth_jwt: "auth_jwt"
+  csrfjwt: "csrfjwt"
+  grpc: "grpc"
+  port: "5432"
+  ssl_mode: "disable"

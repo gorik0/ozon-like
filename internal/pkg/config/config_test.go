@@ -31,14 +31,18 @@ func TestMustLoad(t *testing.T) {
 }
 
 func TestNotCrasher(t *testing.T) {
-	//
-	//cmd := exec.Command(os.Args[0], "-test.run=TestCrasher")
-	//cmd.Env = append(os.Environ(), "BE_CRASHER=1")
-	//err := cmd.Run()
-	//if e, ok := err.(*exec.ExitError); ok && !e.Success() {
-	//	return
-	//}
-	//t.Fatalf("process ran with err %v, want exit status 1", err)
+	if os.Getenv("BE_CRASHER") == "1" {
+
+		MustLoad()
+		return
+	}
+	cmd := exec.Command(os.Args[0], "-test.run=TestNotCrasher")
+	cmd.Env = append(os.Environ(), "BE_CRASHER=1")
+	err := cmd.Run()
+	if err != nil {
+
+		t.Fatalf("process ran with err %v, want NO err", err)
+	}
 
 }
 
@@ -48,7 +52,7 @@ func TestCrasher(t *testing.T) {
 		return
 	}
 	cmd := exec.Command(os.Args[0], "-test.run=TestCrasher")
-	cmd.Env = append(os.Environ(), "BE_CRASHER=1")
+	cmd.Env = append(os.Environ(), "BE_CRASHER=1", "CONF_PATH=dfdf")
 	err := cmd.Run()
 	if e, ok := err.(*exec.ExitError); ok && !e.Success() {
 		return

@@ -1,6 +1,9 @@
 package main
 
-import "os"
+import (
+	"os"
+	"ozone/internal/pkg/config"
+)
 
 func main() {
 	if err := run(); err != nil {
@@ -10,6 +13,8 @@ func main() {
 
 func run() error {
 	//
+
+	config.MustLoad()
 	return nil
 
 }
