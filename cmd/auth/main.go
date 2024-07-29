@@ -9,6 +9,7 @@ func main() {
 }
 
 func run() error {
-	config.
+	//
+	return nil
 
 }
