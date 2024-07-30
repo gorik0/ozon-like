@@ -12,9 +12,9 @@ type Config struct {
 	Database
 	AuthJWT `yaml:"auth_jwt"`
 	CSRFJWT `yaml:"csrfjwt"`
-	GRPC    `yaml:"grpc"`
+	GRPC    GRPC `yaml:"grpc"`
 
-	Environmet      string `json:"environmet" env-default:"dev" env-description:"available: local, dev, prod"`
+	Environmet      string `json:"environmet" env-default:"local" env-description:"available: local, dev, prod"`
 	LogFilePath     string `env:"LOG_FILEPATH" env-default:"zuzu.log"`
 	PhotosFilesPath string `env:"PHOTOS_FILESPATH" env-default:"photos/"`
 }
@@ -22,12 +22,24 @@ type Config struct {
 type HTTPServer struct {
 }
 type Database struct {
+	DBuser    string
+	DBpass    string
+	DBname    string
+	DBhost    string
+	DBport    string
+	DBsslmode string
 }
 type AuthJWT struct {
 }
 type CSRFJWT struct {
 }
 type GRPC struct {
+	AuthPort            int    `env:"GRPC_AUTH_PORT" env-defualt:"8011" yaml:"auth_port"`
+	OrderPort           int    `env:"GRPC_ORDER_PORT" env-defualt:"8012"`
+	ProductsPort        int    `env:"GRPC_PRODUCTS_PORT" env-defualt:"8013"`
+	AuthContainerIP     string `env:"GRPC_AUTH_CONTAINER_IP" env-defualt:"zuzu-auth"`
+	OrderContainerIP    string `env:"GRPC_ORDER_CONTAINER_IP" env-defualt:"zuzu-order"`
+	ProductsContainerIP string `env:"GRPC_PRODUCTS_CONTAINER_IP" env-defualt:"zuzu-products"`
 }
 
 func MustLoad() *Config {
