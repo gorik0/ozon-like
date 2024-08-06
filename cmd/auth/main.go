@@ -4,11 +4,13 @@ import (
 	"context"
 	"errors"
 	"fmt"
-	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/jackc/pgx/v4/pgxpool"
 	"log"
 	"log/slog"
 	"os"
 	"ozone/internal/pkg/config"
+	"ozone/internal/pkg/profile/repo"
+	"ozone/internal/pkg/profile/usecase"
 	"ozone/internal/utils/logger"
 )
 
@@ -47,7 +49,8 @@ func run() (err error) {
 
 	// ::::::::::::DATABASE::::::::::::::::
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable", cfg.Database.DBuser, cfg.Database.DBpass, cfg.Database.DBhost, cfg.Database.DBport, cfg.Database.DBname)
-	pool, err := pgxpool.New(context.Background(), connStr)
+	pool, err := pgxpool.Connect(context.Background(), connStr)
+
 	if err != nil {
 		loger.Error("Error connecting to database", "err", err)
 		return err
@@ -61,5 +64,9 @@ func run() (err error) {
 
 	// ::::::::::::DATABASE::::::::::::::::
 
+	//::: create repo,usecase,grpc
+
+	profileRepo := repo.NewProfileRepo(pool)
+	profileUseCase := usecase.NewProfileUseCase(profileRepo, cfg)
 	return nil
 }
