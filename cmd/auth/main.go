@@ -8,9 +8,9 @@ import (
 	"log"
 	"log/slog"
 	"os"
+	usecase2 "ozone/internal/pkg/auth/usecase"
 	"ozone/internal/pkg/config"
 	"ozone/internal/pkg/profile/repo"
-	"ozone/internal/pkg/profile/usecase"
 	"ozone/internal/utils/logger"
 )
 
@@ -67,6 +67,7 @@ func run() (err error) {
 	//::: create repo,usecase,grpc
 
 	profileRepo := repo.NewProfileRepo(pool)
-	profileUseCase := usecase.NewProfileUseCase(profileRepo, cfg)
+	profileUseCase := usecase2.NewAuthUsecase(profileRepo, cfg)
+
 	return nil
 }

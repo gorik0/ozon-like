@@ -4,6 +4,7 @@ import (
 	"github.com/ilyakaznacheev/cleanenv"
 	"log"
 	"os"
+	"time"
 )
 
 type Config struct {
@@ -30,6 +31,9 @@ type Database struct {
 	DBsslmode string
 }
 type AuthJWT struct {
+	JwtAccess            string        `env:"AUTH_JWT_SECRET_KEY" env-required:"true"`
+	AccessExpirationTime time.Duration `yaml:"accessExpirationTime" yaml-defualt:"6h"`
+	Issuer               string
 }
 type CSRFJWT struct {
 }
@@ -62,4 +66,14 @@ func MustLoad() *Config {
 		os.Exit(3)
 	}
 	return &cfg
+}
+
+func (a AuthJWT) GetTTL() time.Duration {
+	return a.AccessExpirationTime
+}
+func (a AuthJWT) GetSecret() string {
+	return a.JwtAccess
+}
+func (a AuthJWT) GetIssuer() string {
+	return "auth"
 }
